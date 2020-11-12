@@ -2,41 +2,31 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:monecom/components/cadastro_button.dart';
-import 'package:monecom/components/email_button.dart';
 import 'package:monecom/components/paisagem_view.dart';
-import 'package:monecom/components/whatsapp_button.dart';
+import 'package:monecom/main.dart';
+import 'package:monecom/screens/compartilha_screen.dart';
+import 'package:monecom/screens/lista_clientes_screen.dart';
 import 'package:mqtt_client/mqtt_client.dart' as mqtt;
 
 class BaseScreen extends StatefulWidget {
-  BaseScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _BaseScreenState createState() => _BaseScreenState();
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  String broker = 'test.mosquitto.org';
+  String broker = 'broker.hivemq.com';
+  double _temp = 20;
   int port = 1883;
   String clientIdentifier = 'monecomclientid';
   String topic = 'monecom_temperatura';
-
   mqtt.MqttClient client;
   mqtt.MqttConnectionState connectionState;
-
-  double _temp = 20;
-
   StreamSubscription subscription;
-
-  //Conecta no servidor MQTT assim que inicializar a tela
 
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
   }
-
-  //Assina o tópico onde virão os dados de temperatura
 
   void _subscribeToTopic(String topic) {
     if (connectionState == mqtt.MqttConnectionState.connected) {
@@ -47,67 +37,120 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_temp);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mon&Com"),
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 0.8,
+        title: Text(
+          'Mon&Com',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        margin: EdgeInsets.only(bottom: 100),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
               children: [
                 SizedBox(
-                  height: 10,
+                  height: 45,
                 ),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    "A temperatura atual é de $_temp ºC.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30,
+                SizedBox(
+                  width: 250,
+                  height: 60,
+                  child: CadastroButton(),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                  width: 250,
+                  height: 60,
+                  child: RaisedButton(
+                    elevation: 8,
+                    onPressed: () {
+                      return Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CompartilhaScreen(_temp)),
+                      );
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: Text(
+                      'Compartilhamento',
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 30,
                 ),
-                PaisagemView(_temp),
                 SizedBox(
-                  height: 40,
+                  height: 450,
+                  width: 340,
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40.0),
+                      ),
+                      color: shrineBlack100,
+                      elevation: 10,
+                      clipBehavior: Clip.antiAlias,
+                      child: Padding(
+                        padding: EdgeInsets.all(24),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "A temperatura atual é de ${_temp.toInt()} ºC.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              PaisagemView(_temp),
+                              SizedBox(
+                                height: 40,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                CadastroButton(),
-                EmailButton(_temp),
               ],
             ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: WhatsAppButton(_temp),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => ListaClientesScreen()));
+        },
+        tooltip: 'Ligar/Desligar',
+        child: Icon(
+          Icons.people,
+          size: 40,
+        ),
+      ),
     );
   }
-
-  /*FloatingActionButton(
-    onPressed: _onoff,
-    backgroundColor: Colors.blue,
-    tooltip: 'Ligar/Desligar',
-    child: Icon(
-      Icons.play_arrow,
-      color: Colors.white,
-      size: 40,
-    ),
-  )*/
-
-  /*void _onoff() async {
-    Uint8Buffer value = Uint8Buffer();
-    value.add(1);
-    client.publishMessage("professor_onoff", mqtt.MqttQos.exactlyOnce, value);
-  }*/
 
   //Conecta no servidor MQTT à partir dos dados configurados nos atributos desta classe (broker, port, etc...)
 
@@ -187,4 +230,10 @@ class _BaseScreenState extends State<BaseScreen> {
       _temp = double.parse(message);
     });
   }
+
+  /*void _onoff() async {
+    Uint8Buffer value = Uint8Buffer();
+    value.add(1);
+    client.publishMessage("professor_onoff", mqtt.MqttQos.exactlyOnce, value);
+  }*/
 }

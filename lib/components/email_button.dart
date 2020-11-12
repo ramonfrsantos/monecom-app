@@ -14,18 +14,16 @@ class EmailButton extends StatelessWidget {
     String message = "Estão fazendo ${valor.toInt()} graus.";
 
     return SizedBox(
-      width: 350,
+      width: 300,
       height: 60,
       child: Padding(
           padding: EdgeInsets.only(bottom: 8),
           child: RaisedButton(
               elevation: 8,
               child: Text(
-                'Enviar email com as informações',
+                'COMPARTILHAR RESULTADOS',
                 style: TextStyle(
-                  color: Colors.white,
                   fontSize: 19,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               shape: RoundedRectangleBorder(
