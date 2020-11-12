@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   mqtt_client: ^5.5.3
+  share: ^0.6.5+4
   url_launcher:
   csv: ^4.1.0
   mobx:
@@ -38,12 +39,8 @@ dependencies:
   firebase_analytics: ^6.2.0
   cloud_firestore: ^0.14.3
   firebase_auth: ^0.18.3
-  http: ^0.12.2
-  mysql1: ^0.17.1
-  bordered_text: ^1.0.1
-  intl: ^0.16.1
-  splashscreen: ^1.3.3
-  brasil_fields: ^0.4.0
+  mongo_dart: ^0.4.3
+  sevr: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +51,7 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter. ---- Uni Sans Heavy
+# The following section is specific to Flutter.
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -77,17 +74,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-    - family: UniSans-Heavy
-      fonts:
-        - asset: assets/fonts/UniSansDemo-HeavyCAPS.otf
-    - family: UniSans-Thin
-      fonts:
-        - asset: assets/fonts/UniSansDemo-ThinCAPS.otf
-
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

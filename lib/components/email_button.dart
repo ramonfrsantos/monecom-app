@@ -5,25 +5,27 @@ import 'package:url_launcher/url_launcher.dart';
 DocumentSnapshot snapshot;
 
 class EmailButton extends StatelessWidget {
-  int statusSensor;
-  int idSensor;
-  var data;
+  final double valor;
 
-  EmailButton(this.statusSensor, this.idSensor, this.data);
+  EmailButton(this.valor);
 
   @override
   Widget build(BuildContext context) {
+    String message = "Estão fazendo ${valor.toInt()} graus.";
+
     return SizedBox(
-      width: 300,
+      width: 350,
       height: 60,
       child: Padding(
           padding: EdgeInsets.only(bottom: 8),
           child: RaisedButton(
               elevation: 8,
               child: Text(
-                'COMPARTILHAR RESULTADOS',
+                'Enviar email com as informações',
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 19,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               shape: RoundedRectangleBorder(
@@ -51,8 +53,7 @@ class EmailButton extends StatelessWidget {
                     queryParameters: {
                       'subject':
                           '[Mon&Com] Estamos enviando informações do monitoramento.',
-                      'body':
-                          "O sensor $idSensor foi acionado na área $statusSensor, em ${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}, às ${data.toString().substring(11, 19)}."
+                      'body': '$message'
                     },
                   );
 
