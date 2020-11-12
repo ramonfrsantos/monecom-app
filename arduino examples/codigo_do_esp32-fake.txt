@@ -1,0 +1,91 @@
+#include <WiFi.h>
+#include <PubSubClient.h> //2.6.0
+
+
+#define ID_MQTT  "esp32_mqtt.chico"
+
+const char* SSID = "peter_parker"; // SSID / nome da rede WI-FI que deseja se conectar
+const char* PASSWORD = "peter123"; // Senha da rede WI-FI que deseja se conectar
+
+long ultimoTempo = 0;
+
+float tempFake = 20;
+
+WiFiClient espClient; // Cria o objeto espClient
+PubSubClient MQTT(espClient); // Instancia o Cliente MQTT passando o objeto espClient
+
+const char* BROKER_MQTT = "iot.plug.farm";
+int BROKER_PORT = 1883; // Porta do Broker MQTT
+const char* TOPIC = "professor_temp";
+bool ligado = true;
+
+void verificaConexoesWiFIEMQTT(void) {
+    reconnectWiFi(); //se não há conexão com o WiFI, a conexão é refeita
+    reconnectMQTT(); //se não há conexão com o Broker, a conexão é refeita
+}
+
+void reconnectMQTT(void) {
+    while (!MQTT.connected()) {
+        MQTT.setServer(BROKER_MQTT, BROKER_PORT);   //informa qual broker e porta deve ser conectado
+        MQTT.setCallback(receberMensagem);            //atribui função de callback (função chamada quando qualquer informação de um dos tópicos subescritos chega)
+
+        Serial.print("* Tentando se conectar ao Broker MQTT: ");
+        Serial.println(BROKER_MQTT);
+        if (MQTT.connect(ID_MQTT)) {
+            Serial.println("Conectado com sucesso ao broker MQTT!");
+            MQTT.subscribe("professor_onoff");
+        } else {
+            Serial.println("Falha ao reconectar no broker.");
+            Serial.println("Havera nova tentatica de conexao em 2s");
+            delay(2000);
+        }
+    }
+    MQTT.loop();
+}
+void reconnectWiFi(void) {
+    //se já está conectado a rede WI-FI, nada é feito.
+    //Caso contrário, são efetuadas tentativas de conexão
+    if (WiFi.status() == WL_CONNECTED) {
+        return;
+    }
+
+    WiFi.begin(SSID, PASSWORD); // Conecta na rede WI-FI
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(100);
+        Serial.print(".");
+    }
+
+    Serial.println();
+    Serial.print("Conectado com sucesso na rede ");
+    Serial.print(SSID);
+    Serial.println("IP obtido: ");
+    Serial.println(WiFi.localIP());
+}
+
+void receberMensagem(char* topic, byte* payload, unsigned int length){
+   Serial.println("clicou no app");
+   if(ligado){
+    digitalWrite(12, HIGH);
+   }else{
+    digitalWrite(12, LOW);
+   }
+   ligado = !ligado;
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(12, OUTPUT);
+}
+
+void loop() {
+  verificaConexoesWiFIEMQTT();
+  if(millis() - ultimoTempo > 5000){
+    tempFake++;
+    ultimoTempo = millis();
+    String msg = String(tempFake);
+    MQTT.publish(TOPIC, msg.c_str());
+    Serial.println(msg);
+    tempFake = tempFake > 80 ? 20 : tempFake;
+  }
+}

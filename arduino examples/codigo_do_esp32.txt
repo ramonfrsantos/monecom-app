@@ -1,0 +1,80 @@
+#include "DHT.h" //1.3.8
+
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+
+#define ID_MQTT  "esp32_mqtt.chico"
+
+const char* SSID = "peter_parker"; // SSID / nome da rede WI-FI que deseja se conectar
+const char* PASSWORD = "peter123"; // Senha da rede WI-FI que deseja se conectar
+
+long ultimoTempo = 0;
+
+DHT dht(13, DHT11);
+WiFiClient espClient; // Cria o objeto espClient
+PubSubClient MQTT(espClient); // Instancia o Cliente MQTT passando o objeto espClient
+
+const char* BROKER_MQTT = "iot.plug.farm";
+int BROKER_PORT = 1883; // Porta do Broker MQTT
+const char* TOPIC = "professor_temp";
+
+void verificaConexoesWiFIEMQTT(void) {
+    reconnectWiFi(); //se não há conexão com o WiFI, a conexão é refeita
+    reconnectMQTT(); //se não há conexão com o Broker, a conexão é refeita
+}
+
+void reconnectMQTT(void) {
+    while (!MQTT.connected()) {
+        MQTT.setServer(BROKER_MQTT, BROKER_PORT);   //informa qual broker e porta deve ser conectado
+
+        Serial.print("* Tentando se conectar ao Broker MQTT: ");
+        Serial.println(BROKER_MQTT);
+        if (MQTT.connect(ID_MQTT)) {
+            Serial.println("Conectado com sucesso ao broker MQTT!");
+            MQTT.subscribe("aula/fcxexemplo04");
+        } else {
+            Serial.println("Falha ao reconectar no broker.");
+            Serial.println("Havera nova tentatica de conexao em 2s");
+            delay(2000);
+        }
+    }
+    MQTT.loop();
+}
+void reconnectWiFi(void) {
+    //se já está conectado a rede WI-FI, nada é feito.
+    //Caso contrário, são efetuadas tentativas de conexão
+    if (WiFi.status() == WL_CONNECTED) {
+        return;
+    }
+
+    WiFi.begin(SSID, PASSWORD); // Conecta na rede WI-FI
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(100);
+        Serial.print(".");
+    }
+
+    Serial.println();
+    Serial.print("Conectado com sucesso na rede ");
+    Serial.print(SSID);
+    Serial.println("IP obtido: ");
+    Serial.println(WiFi.localIP());
+}
+
+
+void setup() {
+  dht.begin();
+  Serial.begin(115200);
+}
+
+void loop() {
+  verificaConexoesWiFIEMQTT();
+  if(millis() - ultimoTempo > 5000){
+    float t = dht.readTemperature();
+    ultimoTempo = millis();
+    String msg = String(t);
+    MQTT.publish(TOPIC, msg.c_str());
+    Serial.println(msg);
+  }
+}

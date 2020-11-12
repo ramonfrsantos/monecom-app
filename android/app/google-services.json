@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "842040082954",
+    "firebase_url": "https://monecom-e244f.firebaseio.com",
+    "project_id": "monecom-e244f",
+    "storage_bucket": "monecom-e244f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842040082954:android:f8ebe576c6db793e9015f3",
+        "android_client_info": {
+          "package_name": "br.com.santos.monecom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842040082954-5n55k4ur3ksvo74ihl5vukh00en99jtv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.santos.monecom",
+            "certificate_hash": "35b6cbe3ff418f7248263953cee99be22a9014a0"
+          }
+        },
+        {
+          "client_id": "842040082954-ncs5gtt725ht2fer3tg3g4c7skbml790.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmOzUlC-Hs30XvWYLIDLU85l1aZlt4zqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842040082954-ncs5gtt725ht2fer3tg3g4c7skbml790.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
