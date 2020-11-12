@@ -17,7 +17,7 @@ class ListaClientesScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0.8,
         title: Text(
-          "Lista de clientes cadastrados",
+          "Clientes cadastrados",
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class ListaClientesScreen extends StatelessWidget {
                       );
                     }
                     return Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(8),
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: snapshot.data.docs.length,
@@ -85,11 +85,18 @@ class ListaClientesScreen extends StatelessWidget {
                                     ),
                                     title: Text(
                                       "Atenção:",
-                                      style: TextStyle(color: shrineBlack400),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        color: shrineBlack400,
+                                      ),
                                     ),
                                     content: Text(
                                       "Deseja confirmar a exclusão do cadastro desse usuário?",
-                                      style: TextStyle(color: shrineBlack400),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: shrineBlack400,
+                                      ),
                                     ),
                                     actions: [
                                       FlatButton(
@@ -125,6 +132,7 @@ class ListaClientesScreen extends StatelessWidget {
                               title: Text(item['nome']),
                               subtitle: Text(
                                 item['email'],
+                                style: TextStyle(fontSize: 14),
                               ),
                             ),
                           );

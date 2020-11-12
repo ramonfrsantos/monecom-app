@@ -1,13 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:monecom/components/email_button.dart';
 import 'package:monecom/components/whatsapp_button.dart';
+import 'package:monecom/library/models/mysql.dart';
 
-class CompartilhaScreen extends StatelessWidget {
-  final double temp;
-  CompartilhaScreen(this.temp);
+class CompartilhaScreen extends StatefulWidget {
+  @override
+  _CompartilhaScreenState createState() => _CompartilhaScreenState();
+}
+
+class _CompartilhaScreenState extends State<CompartilhaScreen> {
+  var db = Mysql();
+  var statusSensor;
+  var idSensor;
+  var data;
+
+  void _getData() {
+    db.getConnection().then((conn) {
+      String sql =
+          'select statusSensor,idSensor, data from registrosIot where idSensor = 3;';
+      conn.query(sql).then((results) {
+        for (var row in results) {
+          setState(() {
+            statusSensor = row[0];
+            idSensor = row[1];
+            data = row[2];
+          });
+        }
+      });
+      conn.close();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getData();
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -29,11 +56,11 @@ class CompartilhaScreen extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
-              WhatsAppButton(temp),
+              WhatsAppButton(),
               SizedBox(
                 height: 20,
               ),
-              EmailButton(temp),
+              EmailButton(statusSensor, idSensor, data),
               SizedBox(
                 height: 100,
               ),

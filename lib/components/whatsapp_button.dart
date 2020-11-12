@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WhatsAppButton extends StatelessWidget {
-  final double value;
-
-  WhatsAppButton(this.value);
-
   @override
   Widget build(BuildContext context) {
     String menssagem = "Olá, gostaria de falar com um atendente.";
+    String phone = "+553199913408";
 
     return SizedBox(
       width: 300,
@@ -39,7 +36,7 @@ class WhatsAppButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(30.0),
         ),
         onPressed: () {
-          String url = 'whatsapp://send?phone=+5531996676802&text=$menssagem';
+          String url = 'whatsapp://send?phone=$phone&text=$menssagem';
 
           launch(Uri.encodeFull(url));
         },
