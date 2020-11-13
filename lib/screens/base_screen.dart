@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monecom/components/cadastro_button.dart';
-import 'package:monecom/screens/compartilha_screen.dart';
-import 'package:monecom/screens/gado_info_screen.dart';
-import 'package:monecom/screens/lista_clientes_screen.dart';
+import 'package:monecom/components/signup_button_component.dart';
+import 'package:monecom/screens/clients_list_screen.dart';
+import 'package:monecom/screens/iot_info_screen.dart';
+import 'package:monecom/screens/share_info_screen.dart';
 import 'package:mqtt_client/mqtt_client.dart' as mqtt;
 
 import '../main.dart';
@@ -81,7 +81,7 @@ class _BaseScreenState extends State<BaseScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CadastroButton(),
+              SingUpButton(),
               SizedBox(
                 height: 30,
               ),
@@ -99,7 +99,7 @@ class _BaseScreenState extends State<BaseScreen> {
                       return Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => GadoInfoScreen()),
+                            builder: (context) => IotInfoScreen()),
                       );
                     },
                     child: Card(
@@ -139,7 +139,7 @@ class _BaseScreenState extends State<BaseScreen> {
                 onTap: () {
                   return Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GadoInfoScreen()),
+                    MaterialPageRoute(builder: (context) => IotInfoScreen()),
                   );
                 },
                 child: Text(
@@ -160,7 +160,7 @@ class _BaseScreenState extends State<BaseScreen> {
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ListaClientesScreen()));
+            context, MaterialPageRoute(builder: (_) => ClientsListScreen()));
       },
       tooltip: 'Ligar/Desligar',
       child: Icon(
@@ -179,7 +179,7 @@ class _BaseScreenState extends State<BaseScreen> {
         onPressed: () {
           return Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CompartilhaScreen()),
+            MaterialPageRoute(builder: (context) => ShareInfoScreen()),
           );
         },
         shape: RoundedRectangleBorder(

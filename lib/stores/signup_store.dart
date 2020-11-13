@@ -1,11 +1,11 @@
 import 'package:mobx/mobx.dart';
 import 'package:monecom/helpers/extensions.dart';
 
-part 'cadastro_store.g.dart';
+part 'signup_store.g.dart';
 
-class CadastroStore = _CadastroStore with _$CadastroStore;
+class SignUpStore = _SignUpStore with _$SignUpStore;
 
-abstract class _CadastroStore with Store {
+abstract class _SignUpStore with Store {
   @observable
   String name;
 

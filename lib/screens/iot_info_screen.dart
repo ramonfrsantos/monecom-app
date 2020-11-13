@@ -2,16 +2,16 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:monecom/library/models/mysql.dart';
-import 'package:monecom/screens/lista_clientes_screen.dart';
+import 'package:monecom/screens/clients_list_screen.dart';
 
 import '../main.dart';
 
-class GadoInfoScreen extends StatefulWidget {
+class IotInfoScreen extends StatefulWidget {
   @override
-  _GadoInfoScreenState createState() => _GadoInfoScreenState();
+  _IotInfoScreenState createState() => _IotInfoScreenState();
 }
 
-class _GadoInfoScreenState extends State<GadoInfoScreen> {
+class _IotInfoScreenState extends State<IotInfoScreen> {
   var db = Mysql();
   var statusSensor;
   var idSensor;
@@ -64,15 +64,15 @@ class _GadoInfoScreenState extends State<GadoInfoScreen> {
           ),
         ),
       )),
-      floatingActionButton: _listaFloatingButton(),
+      floatingActionButton: _listFloatingButton(),
     );
   }
 
-  Widget _listaFloatingButton() {
+  Widget _listFloatingButton() {
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ListaClientesScreen()));
+            context, MaterialPageRoute(builder: (_) => ClientsListScreen()));
       },
       tooltip: 'Ligar/Desligar',
       child: Icon(

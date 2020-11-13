@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cadastro_store.dart';
+part of 'signup_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,30 +8,30 @@ part of 'cadastro_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$CadastroStore on _CadastroStore, Store {
+mixin _$SignUpStore on _SignUpStore, Store {
   Computed<bool> _$nameIsValidComputed;
 
   @override
   bool get nameIsValid =>
       (_$nameIsValidComputed ??= Computed<bool>(() => super.nameIsValid,
-              name: '_CadastroStore.nameIsValid'))
+              name: '_SignUpStore.nameIsValid'))
           .value;
   Computed<bool> _$emailIsValidComputed;
 
   @override
   bool get emailIsValid =>
       (_$emailIsValidComputed ??= Computed<bool>(() => super.emailIsValid,
-              name: '_CadastroStore.emailIsValid'))
+              name: '_SignUpStore.emailIsValid'))
           .value;
   Computed<bool> _$isFormValidComputed;
 
   @override
   bool get isFormValid =>
       (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
-              name: '_CadastroStore.isFormValid'))
+              name: '_SignUpStore.isFormValid'))
           .value;
 
-  final _$nameAtom = Atom(name: '_CadastroStore.name');
+  final _$nameAtom = Atom(name: '_SignUpStore.name');
 
   @override
   String get name {
@@ -46,7 +46,7 @@ mixin _$CadastroStore on _CadastroStore, Store {
     });
   }
 
-  final _$emailAtom = Atom(name: '_CadastroStore.email');
+  final _$emailAtom = Atom(name: '_SignUpStore.email');
 
   @override
   String get email {
@@ -61,28 +61,27 @@ mixin _$CadastroStore on _CadastroStore, Store {
     });
   }
 
-  final _$_CadastroStoreActionController =
-      ActionController(name: '_CadastroStore');
+  final _$_SignUpStoreActionController = ActionController(name: '_SignUpStore');
 
   @override
   void setName(String value) {
-    final _$actionInfo = _$_CadastroStoreActionController.startAction(
-        name: '_CadastroStore.setName');
+    final _$actionInfo = _$_SignUpStoreActionController.startAction(
+        name: '_SignUpStore.setName');
     try {
       return super.setName(value);
     } finally {
-      _$_CadastroStoreActionController.endAction(_$actionInfo);
+      _$_SignUpStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setEmail(String value) {
-    final _$actionInfo = _$_CadastroStoreActionController.startAction(
-        name: '_CadastroStore.setEmail');
+    final _$actionInfo = _$_SignUpStoreActionController.startAction(
+        name: '_SignUpStore.setEmail');
     try {
       return super.setEmail(value);
     } finally {
-      _$_CadastroStoreActionController.endAction(_$actionInfo);
+      _$_SignUpStoreActionController.endAction(_$actionInfo);
     }
   }
 

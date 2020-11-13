@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monecom/screens/base_screen.dart';
-import 'package:monecom/stores/cadastro_store.dart';
+import 'package:monecom/stores/signup_store.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
@@ -18,7 +18,7 @@ void main() async {
 }
 
 void setupLocators() {
-  GetIt.I.registerSingleton(CadastroStore());
+  GetIt.I.registerSingleton(SignUpStore());
 }
 
 class MyApp extends StatefulWidget {

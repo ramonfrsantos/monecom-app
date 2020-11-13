@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monecom/screens/cadastro_screen.dart';
+import 'package:monecom/screens/signup_screen.dart';
 
-class CadastroButton extends StatelessWidget {
+class SingUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -18,7 +18,7 @@ class CadastroButton extends StatelessWidget {
           ),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CadastroScreen()));
+                MaterialPageRoute(builder: (context) => SignUpScreen()));
           }),
     );
   }

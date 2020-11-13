@@ -3,15 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monecom/main.dart';
-import 'package:monecom/stores/cadastro_store.dart';
+import 'package:monecom/stores/signup_store.dart';
 
-class AlterarCadastroScreen extends StatelessWidget {
-  final CadastroStore cadastroStore = GetIt.I<CadastroStore>();
-  final db = FirebaseFirestore.instance;
-
-  var docId;
-
-  AlterarCadastroScreen(this.docId);
+class SignUpScreen extends StatelessWidget {
+  final SignUpStore signUpStore = GetIt.I<SignUpStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +15,7 @@ class AlterarCadastroScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0.8,
         title: Text(
-          'Alterar Cadastro',
+          'SignUp',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -44,35 +39,7 @@ class AlterarCadastroScreen extends StatelessWidget {
                   return SizedBox(
                     height: 40,
                     width: 110,
-                    child: RaisedButton(
-                      child: Text(
-                        'Alterar',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onPressed: () async {
-                        if (cadastroStore.isFormValid) {
-                          db.collection('clientes').doc(docId).delete();
-
-                          db.collection("clientes").add({
-                            "nome": "${cadastroStore.name}",
-                            "email": "${cadastroStore.email}",
-                          });
-
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-
-                          return showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _buildAlertDialog();
-                              });
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
+                    child: _buildSendButton(context),
                   );
                 },
               )
@@ -80,6 +47,37 @@ class AlterarCadastroScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSendButton(BuildContext context) {
+    return RaisedButton(
+      child: Text(
+        'Enviar',
+        style: TextStyle(
+          fontSize: 18,
+        ),
+      ),
+      onPressed: () {
+        if (signUpStore.isFormValid) {
+          FirebaseFirestore db = FirebaseFirestore.instance;
+
+          db.collection("clientes").add({
+            "nome": "${signUpStore.name}",
+            "email": "${signUpStore.email}",
+          });
+
+          Navigator.pop(context);
+
+          return showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return _buildAlertDialog();
+              });
+        } else {
+          return null;
+        }
+      },
     );
   }
 
@@ -96,7 +94,7 @@ class AlterarCadastroScreen extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       content: Text(
-        "O cadastro foi alterado com sucesso!",
+        "O cliente foi cadastrado com sucesso!",
         style: TextStyle(
           color: shrineBlack400,
           fontSize: 18,
@@ -113,10 +111,10 @@ class AlterarCadastroScreen extends StatelessWidget {
   Widget _buildName() {
     return Observer(builder: (_) {
       return TextField(
-        onChanged: cadastroStore.setName,
+        onChanged: signUpStore.setName,
         decoration: InputDecoration(
-          labelText: 'Novo nome',
-          errorText: cadastroStore.nameError,
+          labelText: 'Nome',
+          errorText: signUpStore.nameError,
         ),
       );
     });
@@ -125,10 +123,10 @@ class AlterarCadastroScreen extends StatelessWidget {
   Widget _buildEmail() {
     return Observer(builder: (_) {
       return TextField(
-        onChanged: cadastroStore.setEmail,
+        onChanged: signUpStore.setEmail,
         decoration: InputDecoration(
-          labelText: 'Novo e-mail',
-          errorText: cadastroStore.emailError,
+          labelText: 'E-mail',
+          errorText: signUpStore.emailError,
         ),
         keyboardType: TextInputType.emailAddress,
       );

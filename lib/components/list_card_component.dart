@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:monecom/main.dart';
-import 'package:monecom/screens/alterar_cadastro_screen.dart';
+import 'package:monecom/screens/update_client_screen.dart';
 
-class ListaCard extends StatelessWidget {
-  var snapshots = FirebaseFirestore.instance
-      .collection("clientes")
-      .where("email", isNotEqualTo: null)
-      .snapshots();
-
+class ListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var snapshots = FirebaseFirestore.instance
+        .collection("clientes")
+        .where("email", isNotEqualTo: null)
+        .snapshots();
+
     return Card(
       color: shrineBlack100,
       shape: RoundedRectangleBorder(
@@ -75,7 +75,7 @@ class ListaCard extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) =>
-                                                AlterarCadastroScreen(docId)));
+                                                UpdateClientScreen(docId)));
                                   },
                                 ),
                                 FlatButton(

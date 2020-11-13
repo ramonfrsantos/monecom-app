@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:monecom/components/email_button.dart';
-import 'package:monecom/components/whatsapp_button.dart';
+import 'package:monecom/components/email_button_component.dart';
+import 'package:monecom/components/whatsapp_button_component.dart';
 import 'package:monecom/library/models/mysql.dart';
-import 'package:monecom/screens/lista_clientes_screen.dart';
+import 'package:monecom/screens/clients_list_screen.dart';
 
-class CompartilhaScreen extends StatefulWidget {
+class ShareInfoScreen extends StatefulWidget {
   @override
-  _CompartilhaScreenState createState() => _CompartilhaScreenState();
+  _ShareInfoScreenState createState() => _ShareInfoScreenState();
 }
 
-class _CompartilhaScreenState extends State<CompartilhaScreen> {
+class _ShareInfoScreenState extends State<ShareInfoScreen> {
   var db = Mysql();
   var statusSensor;
   var idSensor;
@@ -71,15 +71,15 @@ class _CompartilhaScreenState extends State<CompartilhaScreen> {
           ),
         ),
       ),
-      floatingActionButton: _listaFloatingButton(),
+      floatingActionButton: _listFloatingButton(),
     );
   }
 
-  Widget _listaFloatingButton() {
+  Widget _listFloatingButton() {
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ListaClientesScreen()));
+            context, MaterialPageRoute(builder: (_) => ClientsListScreen()));
       },
       tooltip: 'Ligar/Desligar',
       child: Icon(

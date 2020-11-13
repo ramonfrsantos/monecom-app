@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monecom/components/lista_card.dart';
+import 'package:monecom/components/list_card_component.dart';
 
-class ListaClientesScreen extends StatelessWidget {
+class ClientsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +23,7 @@ class ListaClientesScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(bottom: 8),
-              child: ListaCard(),
+              child: ListCard(),
             ),
           ),
         ),
