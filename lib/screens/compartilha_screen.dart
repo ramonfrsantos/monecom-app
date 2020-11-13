@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monecom/components/email_button.dart';
 import 'package:monecom/components/whatsapp_button.dart';
 import 'package:monecom/library/models/mysql.dart';
+import 'package:monecom/screens/lista_clientes_screen.dart';
 
 class CompartilhaScreen extends StatefulWidget {
   @override
@@ -20,11 +21,13 @@ class _CompartilhaScreenState extends State<CompartilhaScreen> {
           'select statusSensor,idSensor, data from registrosIot where idSensor = 3;';
       conn.query(sql).then((results) {
         for (var row in results) {
-          setState(() {
-            statusSensor = row[0];
-            idSensor = row[1];
-            data = row[2];
-          });
+          if (this.mounted) {
+            setState(() {
+              statusSensor = row[0];
+              idSensor = row[1];
+              data = row[2];
+            });
+          }
         }
       });
       conn.close();
@@ -67,6 +70,21 @@ class _CompartilhaScreenState extends State<CompartilhaScreen> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: _listaFloatingButton(),
+    );
+  }
+
+  Widget _listaFloatingButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => ListaClientesScreen()));
+      },
+      tooltip: 'Ligar/Desligar',
+      child: Icon(
+        Icons.people,
+        size: 40,
       ),
     );
   }

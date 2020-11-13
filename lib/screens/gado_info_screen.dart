@@ -2,6 +2,7 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:monecom/library/models/mysql.dart';
+import 'package:monecom/screens/lista_clientes_screen.dart';
 
 import '../main.dart';
 
@@ -22,11 +23,13 @@ class _GadoInfoScreenState extends State<GadoInfoScreen> {
           'select statusSensor,idSensor, data from registrosIot where idSensor = 3;';
       conn.query(sql).then((results) {
         for (var row in results) {
-          setState(() {
-            statusSensor = row[0];
-            data = row[2];
-            idSensor = row[1];
-          });
+          if (this.mounted) {
+            setState(() {
+              statusSensor = row[0];
+              data = row[2];
+              idSensor = row[1];
+            });
+          }
         }
       });
       conn.close();
@@ -57,154 +60,173 @@ class _GadoInfoScreenState extends State<GadoInfoScreen> {
         child: Padding(
           padding: EdgeInsets.all(15),
           child: SingleChildScrollView(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              color: shrineBlack100,
-              elevation: 10,
-              clipBehavior: Clip.antiAlias,
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(22),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      BorderedText(
-                        strokeColor: shrinePurple900,
-                        strokeWidth: 10.0,
-                        child: Text(
-                          "Informações do sensor",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontFamily: 'UniSans-Heavy'),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            idSensor == null
-                                ? SizedBox(
-                                    height: 100,
-                                  )
-                                : SizedBox(
-                                    height: 80,
-                                  ),
-                            idSensor == null
-                                ? Container()
-                                : RichText(
-                                    text: TextSpan(children: [
-                                    TextSpan(
-                                      text: "ID do Sensor: ",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: idSensor == null ? "" : "$idSensor",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                    )
-                                  ])),
-                            idSensor == null
-                                ? Container()
-                                : SizedBox(
-                                    height: 20,
-                                  ),
-                            idSensor == null
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : RichText(
-                                    text: TextSpan(children: [
-                                    TextSpan(
-                                      text: "Área de acionamento: ",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: "$statusSensor",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                    )
-                                  ])),
-                            idSensor == null
-                                ? Container()
-                                : SizedBox(
-                                    height: 20,
-                                  ),
-                            idSensor == null
-                                ? Container()
-                                : RichText(
-                                    text: TextSpan(children: [
-                                    TextSpan(
-                                      text: "Data: ",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: data == null
-                                          ? ""
-                                          : "${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                    )
-                                  ])),
-                            idSensor == null
-                                ? Container()
-                                : SizedBox(
-                                    height: 20,
-                                  ),
-                            idSensor == null
-                                ? Container()
-                                : RichText(
-                                    text: TextSpan(children: [
-                                    TextSpan(
-                                      text: "Horário: ",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: data == null
-                                          ? ""
-                                          : "${data.toString().substring(11, 19)}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                    )
-                                  ])),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            child: _buildInfoCard(),
           ),
         ),
       )),
+      floatingActionButton: _listaFloatingButton(),
+    );
+  }
+
+  Widget _listaFloatingButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => ListaClientesScreen()));
+      },
+      tooltip: 'Ligar/Desligar',
+      child: Icon(
+        Icons.people,
+        size: 40,
+      ),
+    );
+  }
+
+  Widget _buildInfoCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40.0),
+      ),
+      color: shrineBlack100,
+      elevation: 10,
+      clipBehavior: Clip.antiAlias,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.all(22),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              BorderedText(
+                strokeColor: shrinePurple900,
+                strokeWidth: 10.0,
+                child: Text(
+                  "Informações do sensor",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontFamily: 'UniSans-Heavy'),
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    idSensor == null
+                        ? SizedBox(
+                            height: 100,
+                          )
+                        : SizedBox(
+                            height: 80,
+                          ),
+                    idSensor == null
+                        ? Container()
+                        : RichText(
+                            text: TextSpan(children: [
+                            TextSpan(
+                              text: "ID do Sensor: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: idSensor == null ? "" : "$idSensor",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                    idSensor == null
+                        ? Container()
+                        : SizedBox(
+                            height: 20,
+                          ),
+                    idSensor == null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          )
+                        : RichText(
+                            text: TextSpan(children: [
+                            TextSpan(
+                              text: "Área de acionamento: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: "$statusSensor",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                    idSensor == null
+                        ? Container()
+                        : SizedBox(
+                            height: 20,
+                          ),
+                    idSensor == null
+                        ? Container()
+                        : RichText(
+                            text: TextSpan(children: [
+                            TextSpan(
+                              text: "Data: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: data == null
+                                  ? ""
+                                  : "${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                    idSensor == null
+                        ? Container()
+                        : SizedBox(
+                            height: 20,
+                          ),
+                    idSensor == null
+                        ? Container()
+                        : RichText(
+                            text: TextSpan(children: [
+                            TextSpan(
+                              text: "Horário: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: data == null
+                                  ? ""
+                                  : "${data.toString().substring(11, 19)}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

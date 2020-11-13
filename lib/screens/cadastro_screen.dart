@@ -39,34 +39,7 @@ class CadastroScreen extends StatelessWidget {
                   return SizedBox(
                     height: 40,
                     width: 110,
-                    child: RaisedButton(
-                      child: Text(
-                        'Enviar',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onPressed: () {
-                        if (cadastroStore.isFormValid) {
-                          FirebaseFirestore db = FirebaseFirestore.instance;
-
-                          db.collection("clientes").add({
-                            "nome": "${cadastroStore.name}",
-                            "email": "${cadastroStore.email}",
-                          });
-
-                          Navigator.pop(context);
-
-                          return showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _buildAlertDialog();
-                              });
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
+                    child: _buildSendButton(context),
                   );
                 },
               )
@@ -74,6 +47,37 @@ class CadastroScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSendButton(BuildContext context) {
+    return RaisedButton(
+      child: Text(
+        'Enviar',
+        style: TextStyle(
+          fontSize: 18,
+        ),
+      ),
+      onPressed: () {
+        if (cadastroStore.isFormValid) {
+          FirebaseFirestore db = FirebaseFirestore.instance;
+
+          db.collection("clientes").add({
+            "nome": "${cadastroStore.name}",
+            "email": "${cadastroStore.email}",
+          });
+
+          Navigator.pop(context);
+
+          return showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return _buildAlertDialog();
+              });
+        } else {
+          return null;
+        }
+      },
     );
   }
 

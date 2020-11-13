@@ -35,24 +35,23 @@ class _MyAppState extends State<MyApp> {
       theme: _buildShrineTheme(),
       home: SplashScreen(
         useLoader: false,
-        seconds: 5,
+        seconds: 3,
         routeName: "/",
         navigateAfterSeconds: BaseScreen(),
         title: Text(
           'Mon&Com',
           style: TextStyle(
             color: shrinePurple900,
-            fontSize: 60,
+            fontSize: 70,
             fontFamily: 'UniSans-Heavy',
           ),
         ),
-        //imageBackground: AssetImage('assets/images/cardFundo.png'), //bg
-        //image: Image.network('https://i.imgur.com/TyCSG9A.png'), //logo
-        backgroundColor: shrineBlack400,
-        styleTextUnderTheLoader: new TextStyle(),
-        photoSize: 40.0,
-        onClick: () => print(""),
-        loaderColor: Colors.white,
+        image: Image.asset(
+          'assets/images/logoApp.png',
+          alignment: Alignment.center,
+        ), //log
+        photoSize: 50, // o
+        backgroundColor: Colors.white,
       ),
     );
   }
