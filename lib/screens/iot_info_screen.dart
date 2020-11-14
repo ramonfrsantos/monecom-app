@@ -1,4 +1,5 @@
 import 'package:bordered_text/bordered_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:monecom/library/models/mysql.dart';
@@ -12,6 +13,13 @@ class IotInfoScreen extends StatefulWidget {
 }
 
 class _IotInfoScreenState extends State<IotInfoScreen> {
+  // instanciando o banco de mensagens
+  var snapshots = FirebaseFirestore.instance
+      .collection("mensagens")
+      .where("message", isNotEqualTo: null)
+      .snapshots();
+
+  // instanciando banco mysql
   var db = Mysql();
   var statusSensor;
   var idSensor;
@@ -37,9 +45,13 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     _getData();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),

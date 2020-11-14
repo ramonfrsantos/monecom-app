@@ -1,22 +1,38 @@
 import 'dart:async';
 
 import 'package:bordered_text/bordered_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monecom/components/signup_button_component.dart';
 import 'package:monecom/screens/clients_list_screen.dart';
 import 'package:monecom/screens/iot_info_screen.dart';
 import 'package:monecom/screens/share_info_screen.dart';
-import 'package:mqtt_client/mqtt_client.dart' as mqtt;
 
 import '../main.dart';
 
 //------------------------------------------------------------------
 // As configurações do mqtt estão mantidas no app, mas ele
-// está integrado somente com o mysql. Caso haja necessidade
+// está integrado somente com o mysql e com o firebase. Caso haja necessidade
 // os topicos mqtt podem ser usados normalmente, basta alterar
 // as configurações.
 //------------------------------------------------------------------
+
+class Message {
+  String title;
+  String body;
+  String message;
+  Message(title, body, message) {
+    this.title = title;
+    this.body = body;
+    this.message = message;
+  }
+}
+
+StreamSubscription<DocumentSnapshot> subscription;
+final DocumentReference documentReference =
+    FirebaseFirestore.instance.doc('2938nXJ2SKQLoqR8KVTJ');
 
 class BaseScreen extends StatefulWidget {
   @override
@@ -24,9 +40,57 @@ class BaseScreen extends StatefulWidget {
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  StreamController<Map> _streamController = StreamController<Map>();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  String broker = 'broker.hivemq.com';
+  String token = '';
+
+  String _getToken() {
+    _firebaseMessaging
+        .getToken()
+        .then((deviceToken) => {print("DeviceToken: $deviceToken")});
+  }
+
+  _addToken() {
+    _firebaseMessaging.getToken().then((deviceToken) => {
+          FirebaseFirestore.instance.collection("DeviceTokens").add({
+            "device_token": "$deviceToken",
+          })
+        });
+  }
+
+  // instanciando banco de mensagens no firebase
+  var snapshots = FirebaseFirestore.instance
+      .collection("mensagens")
+      .where("message", isNotEqualTo: null)
+      .snapshots();
+
+  _configureFirebaseListeners() {
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('onMessage: $message');
+        _setMessage(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('onLaunch: $message');
+        _setMessage(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('onResume: $message');
+        _setMessage(message);
+      },
+    );
+  }
+
+  _setMessage(Map<String, dynamic> message) {
+    final notification = message['notification'];
+    final data = message['data'];
+    final String title = notification['title'];
+    final String body = notification['body'];
+    final String mMessage = data['message'];
+  }
+
+  // MQTT configuration================================
+  /*String broker = 'broker.hivemq.com';
   double _temp = 20;
   int port = 1883;
   String clientIdentifier = 'monecomclientid';
@@ -35,16 +99,19 @@ class _BaseScreenState extends State<BaseScreen> {
   mqtt.MqttConnectionState connectionState;
   StreamSubscription subscription;
 
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
-  }
-
   void _subscribeToTopic(String topic) {
     if (connectionState == mqtt.MqttConnectionState.connected) {
       print('[MQTT client] Subscribing to ${topic.trim()}');
       client.subscribe(topic, mqtt.MqttQos.exactlyOnce);
     }
+  }*/
+  //===================================================
+
+  void initState() {
+    super.initState();
+    //WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
+    _configureFirebaseListeners();
+    _getToken();
   }
 
   @override
@@ -198,7 +265,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   //Conecta no servidor MQTT à partir dos dados configurados nos atributos desta classe (broker, port, etc...)
 
-  void _connect() async {
+  /*void _connect() async {
     client = mqtt.MqttClient(broker, '');
     client.port = port;
     client.keepAlivePeriod = 30;
@@ -275,7 +342,7 @@ class _BaseScreenState extends State<BaseScreen> {
     });
   }
 
-  /*void _onoff() async {
+  */ /*void _onoff() async {
     Uint8Buffer value = Uint8Buffer();
     value.add(1);
     client.publishMessage("professor_onoff", mqtt.MqttQos.exactlyOnce, value);
