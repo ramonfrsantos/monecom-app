@@ -42,8 +42,6 @@ class BaseScreen extends StatefulWidget {
 class _BaseScreenState extends State<BaseScreen> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  String token = '';
-
   String _getToken() {
     _firebaseMessaging
         .getToken()
@@ -89,6 +87,17 @@ class _BaseScreenState extends State<BaseScreen> {
     final String mMessage = data['message'];
   }
 
+  _deleteMessages() {
+    FirebaseFirestore.instance
+        .collection("mensagens")
+        .snapshots()
+        .forEach((element) {
+      for (QueryDocumentSnapshot snapshot in element.docs) {
+        snapshot.reference.delete();
+      }
+    });
+  }
+
   // MQTT configuration================================
   /*String broker = 'broker.hivemq.com';
   double _temp = 20;
@@ -112,6 +121,7 @@ class _BaseScreenState extends State<BaseScreen> {
     //WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
     _configureFirebaseListeners();
     _getToken();
+    _deleteMessages();
   }
 
   @override

@@ -43,9 +43,4 @@ exports.messageTrigger = functions.firestore.document('mensagens/{messageId}').o
 	} catch (err) {
 		console.log(err);
 	}
-
-	await admin.firestore()
-	    .collection('mensagens').doc([]).delete();
-
-
 });
