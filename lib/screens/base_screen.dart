@@ -12,13 +12,6 @@ import 'package:monecom/screens/share_info_screen.dart';
 
 import '../main.dart';
 
-//------------------------------------------------------------------
-// As configurações do mqtt estão mantidas no app, mas ele
-// está integrado somente com o mysql e com o firebase. Caso haja necessidade
-// os topicos mqtt podem ser usados normalmente, basta alterar
-// as configurações.
-//------------------------------------------------------------------
-
 class Message {
   String title;
   String body;
@@ -48,13 +41,13 @@ class _BaseScreenState extends State<BaseScreen> {
         .then((deviceToken) => {print("DeviceToken: $deviceToken")});
   }
 
-  _addToken() {
+  /*_addToken() {
     _firebaseMessaging.getToken().then((deviceToken) => {
           FirebaseFirestore.instance.collection("DeviceTokens").add({
             "device_token": "$deviceToken",
           })
         });
-  }
+  }*/
 
   // instanciando banco de mensagens no firebase
   var snapshots = FirebaseFirestore.instance
@@ -85,6 +78,7 @@ class _BaseScreenState extends State<BaseScreen> {
     final String title = notification['title'];
     final String body = notification['body'];
     final String mMessage = data['message'];
+    print("$title $body $message: $mMessage");
   }
 
   _deleteMessages() {
@@ -97,24 +91,6 @@ class _BaseScreenState extends State<BaseScreen> {
       }
     });
   }
-
-  // MQTT configuration================================
-  /*String broker = 'broker.hivemq.com';
-  double _temp = 20;
-  int port = 1883;
-  String clientIdentifier = 'monecomclientid';
-  String topic = 'monecom_temperatura';
-  mqtt.MqttClient client;
-  mqtt.MqttConnectionState connectionState;
-  StreamSubscription subscription;
-
-  void _subscribeToTopic(String topic) {
-    if (connectionState == mqtt.MqttConnectionState.connected) {
-      print('[MQTT client] Subscribing to ${topic.trim()}');
-      client.subscribe(topic, mqtt.MqttQos.exactlyOnce);
-    }
-  }*/
-  //===================================================
 
   void initState() {
     super.initState();
@@ -269,92 +245,4 @@ class _BaseScreenState extends State<BaseScreen> {
       ),
     );
   }
-
-  //-------------------------------------------------------------------------
-  // MQTT - CONFIG
-
-  //Conecta no servidor MQTT à partir dos dados configurados nos atributos desta classe (broker, port, etc...)
-
-  /*void _connect() async {
-    client = mqtt.MqttClient(broker, '');
-    client.port = port;
-    client.keepAlivePeriod = 30;
-    client.onDisconnected = _onDisconnected;
-
-    final mqtt.MqttConnectMessage connMess = mqtt.MqttConnectMessage()
-        .withClientIdentifier(clientIdentifier)
-        .startClean()
-        .keepAliveFor(30)
-        .withWillQos(mqtt.MqttQos.atMostOnce);
-    print('[MQTT client] MQTT client connecting....');
-    client.connectionMessage = connMess;
-
-    try {
-      await client.connect();
-    } catch (e) {
-      print(e);
-      _disconnect();
-    }
-
-    /// Check if we are connected
-    if (client.connectionState == mqtt.MqttConnectionState.connected) {
-      print('[MQTT client] connected');
-      setState(() {
-        connectionState = client.connectionState;
-      });
-    } else {
-      print('[MQTT client] ERROR: MQTT client connection failed - '
-          'disconnecting, state is ${client.connectionState}');
-      _disconnect();
-    }
-
-    subscription = client.updates.listen(_onMessage);
-    _subscribeToTopic(topic);
-  }
-
-  //Desconecta do servidor MQTT
-
-  void _disconnect() {
-    print('[MQTT client] _disconnect()');
-    client.disconnect();
-    _onDisconnected();
-  }
-
-  //Executa algo quando desconectado, no caso, zera as variáveis e imprime msg no console
-
-  void _onDisconnected() {
-    print('[MQTT client] _onDisconnected');
-    setState(() {
-      //topics.clear();
-      connectionState = client.connectionState;
-      client = null;
-      subscription.cancel();
-      subscription = null;
-    });
-    print('[MQTT client] MQTT client disconnected');
-  }
-
-  //Escuta quando mensagens são escritas no tópico. É aqui que lê os dados do servidor MQTT e modifica o valor do termômetro
-
-  void _onMessage(List<mqtt.MqttReceivedMessage> event) {
-    print(event.length);
-    final mqtt.MqttPublishMessage recMess =
-        event[0].payload as mqtt.MqttPublishMessage;
-    final String message =
-        mqtt.MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-    print('[MQTT client] MQTT message: topic is <${event[0].topic}>, '
-        'payload is <-- ${message} -->');
-    print(client.connectionState);
-    print("[MQTT client] message with topic: ${event[0].topic}");
-    print("[MQTT client] message with message: ${message}");
-    setState(() {
-      _temp = double.parse(message);
-    });
-  }
-
-  */ /*void _onoff() async {
-    Uint8Buffer value = Uint8Buffer();
-    value.add(1);
-    client.publishMessage("professor_onoff", mqtt.MqttQos.exactlyOnce, value);
-  }*/
 }
