@@ -53,9 +53,7 @@ class UpdateClientScreen extends StatelessWidget {
                       ),
                       onPressed: () async {
                         if (signUpStore.isFormValid) {
-                          db.collection('clientes').doc(docId).delete();
-
-                          db.collection("clientes").add({
+                          db.collection('clientes').doc(docId).update({
                             "nome": "${signUpStore.name}",
                             "email": "${signUpStore.email}",
                           });
