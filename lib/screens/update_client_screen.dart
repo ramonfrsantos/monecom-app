@@ -94,7 +94,7 @@ class UpdateClientScreen extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       content: Text(
-        "O SignUp foi alterado com sucesso!",
+        "O cadastro foi alterado com sucesso!",
         style: TextStyle(
           color: shrineBlack400,
           fontSize: 18,
