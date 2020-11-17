@@ -8,8 +8,8 @@ import 'package:monecom/stores/signup_store.dart';
 
 void main() async {
   setupLocators();
-  await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());
