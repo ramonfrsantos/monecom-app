@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bordered_text/bordered_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,7 +7,7 @@ import 'package:monecom/components/signup_button_component.dart';
 import 'package:monecom/screens/clients_list_screen.dart';
 import 'package:monecom/screens/iot_info_screen.dart';
 import 'package:monecom/screens/share_info_screen.dart';
-
+n.dart';
 import '../main.dart';
 
 class Message {
@@ -23,10 +21,6 @@ class Message {
   }
 }
 
-StreamSubscription<DocumentSnapshot> subscription;
-final DocumentReference documentReference =
-    FirebaseFirestore.instance.doc('2938nXJ2SKQLoqR8KVTJ');
-
 class BaseScreen extends StatefulWidget {
   @override
   _BaseScreenState createState() => _BaseScreenState();
@@ -34,12 +28,6 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  String _getToken() {
-    _firebaseMessaging
-        .getToken()
-        .then((deviceToken) => {print("DeviceToken: $deviceToken")});
-  }
 
   /*_addToken() {
     _firebaseMessaging.getToken().then((deviceToken) => {
@@ -55,30 +43,24 @@ class _BaseScreenState extends State<BaseScreen> {
       .where("message", isNotEqualTo: null)
       .snapshots();
 
+  _getToken() {
+    _firebaseMessaging
+        .getToken()
+        .then((deviceToken) => {print("DeviceToken: $deviceToken")});
+  }
+
   _configureFirebaseListeners() {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage: $message');
-        _setMessage(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch: $message');
-        _setMessage(message);
       },
       onResume: (Map<String, dynamic> message) async {
         print('onResume: $message');
-        _setMessage(message);
       },
     );
-  }
-
-  _setMessage(Map<String, dynamic> message) {
-    final notification = message['notification'];
-    final data = message['data'];
-    final String title = notification['title'];
-    final String body = notification['body'];
-    final String mMessage = data['message'];
-    print("$title $body $message: $mMessage");
   }
 
   _deleteMessages() {
@@ -94,7 +76,6 @@ class _BaseScreenState extends State<BaseScreen> {
 
   void initState() {
     super.initState();
-    //WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
     _configureFirebaseListeners();
     _getToken();
     _deleteMessages();

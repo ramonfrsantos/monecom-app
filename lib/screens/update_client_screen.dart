@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:monecom/main.dart';
 import 'package:monecom/stores/signup_store.dart';
 
+// ignore: must_be_immutable
 class UpdateClientScreen extends StatelessWidget {
   final SignUpStore signUpStore = GetIt.I<SignUpStore>();
   final db = FirebaseFirestore.instance;

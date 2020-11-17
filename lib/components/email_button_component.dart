@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 DocumentSnapshot snapshot;
 
+// ignore: must_be_immutable
 class EmailButton extends StatelessWidget {
   int statusSensor;
   int idSensor;

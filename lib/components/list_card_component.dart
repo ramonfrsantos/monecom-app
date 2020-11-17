@@ -50,8 +50,8 @@ class ListCard extends StatelessWidget {
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int i) {
                 var doc = snapshot.data.docs[i];
-                var item = doc.data();
                 var docId = doc.id;
+                var item = doc.data();
 
                 return GestureDetector(
                   onLongPress: () {
