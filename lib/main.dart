@@ -3,14 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:monecom/screens/base_screen.dart';
-import 'package:monecom/stores/signup_store.dart';
-import 'package:splashscreen/splashscreen.dart';
+import 'package:monecom/screens/custom_splash_screen.dart';
+import 'package:monecom/stores/signup_storeshscreen.dart';
 
 void main() async {
   setupLocators();
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());
@@ -33,26 +32,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Mon&Com',
       debugShowCheckedModeBanner: false,
       theme: _buildShrineTheme(),
-      home: SplashScreen(
-        useLoader: false,
-        seconds: 3,
-        routeName: "/",
-        navigateAfterSeconds: BaseScreen(),
-        title: Text(
-          'Mon&Com',
-          style: TextStyle(
-            color: shrinePurple900,
-            fontSize: 70,
-            fontFamily: 'UniSans-Heavy',
-          ),
-        ),
-        image: Image.asset(
-          'assets/images/logoApp.png',
-          alignment: Alignment.center,
-        ), //log
-        photoSize: 50, // o
-        backgroundColor: Colors.white,
-      ),
+      home: CustomSplashScreen(),
     );
   }
 }

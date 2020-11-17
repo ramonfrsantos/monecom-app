@@ -10,6 +10,7 @@ class ShareInfoScreen extends StatefulWidget {
 }
 
 class _ShareInfoScreenState extends State<ShareInfoScreen> {
+  //instanciando banco mysql
   var db = Mysql();
   var statusSensor;
   var idSensor;
