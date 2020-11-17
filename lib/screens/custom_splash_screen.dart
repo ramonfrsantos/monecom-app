@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monecom/main.dart';
 import 'package:splashscreen/splashscreen.dart';
-';
+
 import 'base_screen.dart';
 
 class CustomSplashScreen extends StatelessWidget {

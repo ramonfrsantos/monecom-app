@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monecom/screens/custom_splash_screen.dart';
-import 'package:monecom/stores/signup_storeshscreen.dart';
+import 'package:monecom/stores/signup_store.dart';
 
 void main() async {
   setupLocators();

@@ -7,7 +7,7 @@ import 'package:monecom/components/signup_button_component.dart';
 import 'package:monecom/screens/clients_list_screen.dart';
 import 'package:monecom/screens/iot_info_screen.dart';
 import 'package:monecom/screens/share_info_screen.dart';
-n.dart';
+
 import '../main.dart';
 
 class Message {
