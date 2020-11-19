@@ -1,5 +1,4 @@
 import 'package:bordered_text/bordered_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,24 +28,11 @@ class BaseScreen extends StatefulWidget {
 class _BaseScreenState extends State<BaseScreen> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  /*_addToken() {
-    _firebaseMessaging.getToken().then((deviceToken) => {
-          FirebaseFirestore.instance.collection("DeviceTokens").add({
-            "device_token": "$deviceToken",
-          })
-        });
-  }*/
-
-  // instanciando banco de mensagens no firebase
-  var snapshots = FirebaseFirestore.instance
-      .collection("mensagens")
-      .where("message", isNotEqualTo: null)
-      .snapshots();
-
   _getToken() {
     _firebaseMessaging
         .getToken()
         .then((deviceToken) => {print("DeviceToken: $deviceToken")});
+    _firebaseMessaging.subscribeToTopic('all');
   }
 
   _configureFirebaseListeners() {
@@ -63,22 +49,10 @@ class _BaseScreenState extends State<BaseScreen> {
     );
   }
 
-  _deleteMessages() {
-    FirebaseFirestore.instance
-        .collection("mensagens")
-        .snapshots()
-        .forEach((element) {
-      for (QueryDocumentSnapshot snapshot in element.docs) {
-        snapshot.reference.delete();
-      }
-    });
-  }
-
   void initState() {
     super.initState();
     _configureFirebaseListeners();
     _getToken();
-    _deleteMessages();
   }
 
   @override

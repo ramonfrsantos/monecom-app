@@ -15,7 +15,7 @@ class SignUpScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0.8,
         title: Text(
-          'SignUp',
+          'Cadastro',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -34,15 +34,11 @@ class SignUpScreen extends StatelessWidget {
               SizedBox(
                 height: 60,
               ),
-              Observer(
-                builder: (_) {
-                  return SizedBox(
-                    height: 40,
-                    width: 110,
-                    child: _buildSendButton(context),
-                  );
-                },
-              )
+              SizedBox(
+                height: 40,
+                width: 110,
+                child: _buildSendButton(context),
+              ),
             ],
           ),
         ),
@@ -51,34 +47,36 @@ class SignUpScreen extends StatelessWidget {
   }
 
   Widget _buildSendButton(BuildContext context) {
-    return RaisedButton(
-      child: Text(
-        'Enviar',
-        style: TextStyle(
-          fontSize: 18,
+    return Observer(builder: (_) {
+      return RaisedButton(
+        child: Text(
+          'Enviar',
+          style: TextStyle(
+            fontSize: 18,
+          ),
         ),
-      ),
-      onPressed: () {
-        if (signUpStore.isFormValid) {
-          FirebaseFirestore db = FirebaseFirestore.instance;
+        onPressed: () {
+          if (signUpStore.isFormValid) {
+            FirebaseFirestore db = FirebaseFirestore.instance;
 
-          db.collection("clientes").add({
-            "nome": "${signUpStore.name}",
-            "email": "${signUpStore.email}",
-          });
+            db.collection("clientes").add({
+              "nome": "${signUpStore.name}",
+              "email": "${signUpStore.email}",
+            });
 
-          Navigator.pop(context);
+            Navigator.pop(context);
 
-          return showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return _buildAlertDialog();
-              });
-        } else {
-          return null;
-        }
-      },
-    );
+            return showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return _buildAlertDialog();
+                });
+          } else {
+            return null;
+          }
+        },
+      );
+    });
   }
 
   Widget _buildAlertDialog() {
