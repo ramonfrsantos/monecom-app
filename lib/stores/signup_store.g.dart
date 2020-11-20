@@ -23,6 +23,13 @@ mixin _$SignUpStore on _SignUpStore, Store {
       (_$emailIsValidComputed ??= Computed<bool>(() => super.emailIsValid,
               name: '_SignUpStore.emailIsValid'))
           .value;
+  Computed<bool> _$phoneIsValidComputed;
+
+  @override
+  bool get phoneIsValid =>
+      (_$phoneIsValidComputed ??= Computed<bool>(() => super.phoneIsValid,
+              name: '_SignUpStore.phoneIsValid'))
+          .value;
   Computed<bool> _$isFormValidComputed;
 
   @override
@@ -61,6 +68,21 @@ mixin _$SignUpStore on _SignUpStore, Store {
     });
   }
 
+  final _$phoneAtom = Atom(name: '_SignUpStore.phone');
+
+  @override
+  String get phone {
+    _$phoneAtom.reportRead();
+    return super.phone;
+  }
+
+  @override
+  set phone(String value) {
+    _$phoneAtom.reportWrite(value, super.phone, () {
+      super.phone = value;
+    });
+  }
+
   final _$_SignUpStoreActionController = ActionController(name: '_SignUpStore');
 
   @override
@@ -86,12 +108,25 @@ mixin _$SignUpStore on _SignUpStore, Store {
   }
 
   @override
+  void setPhone(String value) {
+    final _$actionInfo = _$_SignUpStoreActionController.startAction(
+        name: '_SignUpStore.setPhone');
+    try {
+      return super.setPhone(value);
+    } finally {
+      _$_SignUpStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 name: ${name},
 email: ${email},
+phone: ${phone},
 nameIsValid: ${nameIsValid},
 emailIsValid: ${emailIsValid},
+phoneIsValid: ${phoneIsValid},
 isFormValid: ${isFormValid}
     ''';
   }

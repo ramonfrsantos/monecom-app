@@ -67,7 +67,7 @@ class ListCard extends StatelessWidget {
                                 FlatButton(
                                   padding: EdgeInsets.symmetric(vertical: 22),
                                   child: Text(
-                                    'Alterar cadastro',
+                                    'Alterar e-mail de cadastro',
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   onPressed: () {

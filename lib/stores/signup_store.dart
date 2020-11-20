@@ -40,6 +40,23 @@ abstract class _SignUpStore with Store {
       return 'E-mail inválido.';
   }
 
+  @observable
+  String phone;
+
+  @action
+  void setPhone(String value) => phone = value;
+
   @computed
-  bool get isFormValid => nameIsValid && emailIsValid;
+  bool get phoneIsValid => phone != null && phone.length >= 14;
+  String get phoneError {
+    if (phone == null || phoneIsValid)
+      return null;
+    else if (phone.isEmpty)
+      return 'Campo obrigatório!';
+    else
+      return 'Celular inválido.';
+  }
+
+  @computed
+  bool get isFormValid => nameIsValid && emailIsValid && phoneIsValid;
 }
