@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -42,17 +43,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String bairro = retorno["bairro"];
     String uf = retorno["uf"];
 
-    String resultado =
-        "Rua: $logradouro, Bairro: $bairro, Cidade: $localidade, Estado: $uf";
-
     setState(() {
       txtBairro.text = bairro;
       txtRua.text = logradouro;
       txtCidade.text = localidade;
       txtEstado.text = uf;
-    });
 
-    print(resultado);
+      String resultado =
+          "Rua: $logradouro, Bairro: $bairro, Cidade: $localidade, Estado: $uf";
+
+      print(resultado);
+    });
   }
 
   @override
@@ -109,45 +110,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildSendButton(BuildContext context) {
-    return Observer(builder: (_) {
-      return RaisedButton(
-        child: Text(
-          'Enviar',
-          style: TextStyle(
-            fontSize: 18,
-          ),
+    return RaisedButton(
+      child: Text(
+        'Enviar',
+        style: TextStyle(
+          fontSize: 18,
         ),
-        onPressed: () {
-          if (signUpStore.isFormValid) {
-            FirebaseFirestore db = FirebaseFirestore.instance;
+      ),
+      onPressed: () {
+        if (signUpStore.isFormValid) {
+          FirebaseFirestore db = FirebaseFirestore.instance;
 
-            db.collection("clientes").add({
-              "nome": "${signUpStore.name}",
-              "email": "${signUpStore.email}",
-              "endereco": {
-                "rua": "${txtRua.text}",
-                "bairro": "${txtBairro.text}",
-                "cidade": "${txtCidade.text}",
-                "uf": "${txtEstado.text}",
-                "numero": "${txtNumero.text}",
-                "complemento": "${txtComplemento.text}",
-              },
-              "telefone": "${signUpStore.phone}"
-            });
+          db.collection("clientes").add({
+            "nome": "${signUpStore.name}",
+            "email": "${signUpStore.email}",
+            "endereco": {
+              "rua": "${txtRua.text}",
+              "bairro": "${txtBairro.text}",
+              "cidade": "${txtCidade.text}",
+              "uf": "${txtEstado.text}",
+              "numero": "${txtNumero.text}",
+              "complemento": "${txtComplemento.text}",
+            },
+            "telefone": "${signUpStore.phone}"
+          });
 
-            Navigator.pop(context);
+          Navigator.pop(context);
 
-            return showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _buildAlertDialog();
-                });
-          } else {
-            return null;
-          }
-        },
-      );
-    });
+          return showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return _buildAlertDialog();
+              });
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   Widget _buildAlertDialog() {
@@ -225,14 +224,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Expanded(
           child: Container(
             child: TextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                CepInputFormatter()
-              ],
+              maxLength: 8,
               controller: txtCep,
               decoration: InputDecoration(
+                counterText: "",
                 labelText: 'Digite o CEP',
               ),
+              keyboardType: TextInputType.number,
             ),
           ),
         ),
