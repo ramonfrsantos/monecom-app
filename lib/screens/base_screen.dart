@@ -170,7 +170,7 @@ class _BaseScreenState extends State<BaseScreen> {
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => ClientsListScreen()));
       },
-      tooltip: 'Ligar/Desligar',
+      tooltip: 'Lista de clientes',
       child: Icon(
         Icons.people,
         size: 40,

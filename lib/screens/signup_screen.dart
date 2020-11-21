@@ -181,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return TextField(
         onChanged: signUpStore.setName,
         decoration: InputDecoration(
-          labelText: 'Nome',
+          labelText: 'Nome*',
           errorText: signUpStore.nameError,
         ),
       );
@@ -197,7 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
         onChanged: signUpStore.setPhone,
         decoration: InputDecoration(
-          labelText: 'Telefone',
+          labelText: 'Telefone*',
           errorText: signUpStore.phoneError,
         ),
       );
@@ -209,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return TextField(
         onChanged: signUpStore.setEmail,
         decoration: InputDecoration(
-          labelText: 'E-mail',
+          labelText: 'E-mail*',
           errorText: signUpStore.emailError,
         ),
         keyboardType: TextInputType.emailAddress,

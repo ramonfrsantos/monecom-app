@@ -114,7 +114,7 @@ class UpdateClientScreen extends StatelessWidget {
       return TextField(
         onChanged: signUpStore.setName,
         decoration: InputDecoration(
-          labelText: 'Novo nome',
+          labelText: 'Novo nome*',
           errorText: signUpStore.nameError,
         ),
       );
@@ -126,7 +126,7 @@ class UpdateClientScreen extends StatelessWidget {
       return TextField(
         onChanged: signUpStore.setEmail,
         decoration: InputDecoration(
-          labelText: 'Novo e-mail',
+          labelText: 'Novo e-mail*',
           errorText: signUpStore.emailError,
         ),
         keyboardType: TextInputType.emailAddress,

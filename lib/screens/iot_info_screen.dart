@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:monecom/library/models/mysql.dart';
 import 'package:monecom/screens/clients_list_screen.dart';
+
 import '../main.dart';
 
 class IotInfoScreen extends StatefulWidget {
@@ -12,7 +13,6 @@ class IotInfoScreen extends StatefulWidget {
 }
 
 class _IotInfoScreenState extends State<IotInfoScreen> {
-
   // instanciando o banco de mensagens
   var snapshots = FirebaseFirestore.instance
       .collection("mensagens")
@@ -86,7 +86,7 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => ClientsListScreen()));
       },
-      tooltip: 'Ligar/Desligar',
+      tooltip: 'Lista de clientes',
       child: Icon(
         Icons.people,
         size: 40,
