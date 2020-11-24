@@ -1,5 +1,4 @@
 import 'package:bordered_text/bordered_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:monecom/library/models/mysql.dart';
@@ -13,74 +12,18 @@ class IotInfoScreen extends StatefulWidget {
 }
 
 class _IotInfoScreenState extends State<IotInfoScreen> {
-  var _idController = TextEditingController();
-
-  // instanciando o banco de mensagens
-  var snapshots = FirebaseFirestore.instance
-      .collection("mensagens")
-      .where("message", isNotEqualTo: null)
-      .snapshots();
+  List<String> _ids = ['1', '2', '3', '4'];
+  var _idSelecionado = '1';
 
   // instanciando banco mysql
   var db = Mysql();
   var area;
   var idSensor;
-  var id;
   var data;
-
-  void _getData() {
-    setState(() {
-      if (id == "") {
-        db.getConnection().then((conn) {
-          String sql = 'select area,idSensor, data from registroIot_V2;';
-          conn.query(sql).then((results) {
-            for (var row in results) {
-              if (this.mounted) {
-                setState(() {
-                  area = row[0];
-                  data = row[2];
-                  idSensor = row[1];
-                });
-              }
-            }
-          });
-          conn.close();
-        });
-      } else {
-        db.getConnection().then((conn) {
-          String sql =
-              'select area,idSensor, data from registroIot_V2 where idSensor = $id;';
-          conn.query(sql).then((results) {
-            for (var row in results) {
-              if (this.mounted) {
-                setState(() {
-                  area = row[0];
-                  data = row[2];
-                  idSensor = row[1];
-                });
-              }
-            }
-          });
-          conn.close();
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _idController.dispose();
-    super.dispose();
-  }
 
   @override
   void initState() {
-    _idController.addListener(() {
-      id = _idController.text;
-      setState(() {
-        _getData();
-      });
-    });
+    _getData();
     super.initState();
   }
 
@@ -112,6 +55,56 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
       )),
       floatingActionButton: _listFloatingButton(),
     );
+  }
+
+  criaDropDownButton() {
+    return DropdownButton<String>(
+        items: _ids.map((String dropDownStringItem) {
+          return DropdownMenuItem<String>(
+            value: dropDownStringItem,
+            child: Text(dropDownStringItem),
+          );
+        }).toList(),
+        onChanged: (String novoItemSelecionado) {
+          _dropDownItemSelected(novoItemSelecionado);
+          setState(() {
+            this._idSelecionado = novoItemSelecionado;
+            _getData();
+          });
+        },
+        value: _idSelecionado);
+  }
+
+  void _getData() {
+    setState(() {
+      db.getConnection().then((conn) {
+        String ids = 'select idSensor from registroIot_V2;';
+        conn.query(ids).then((results) {
+          print("Esses são os resultados: $results");
+        });
+
+        String sql =
+            'select area,idSensor, data from registroIot_V2 where idSensor = $_idSelecionado;';
+        conn.query(sql).then((results) {
+          for (var row in results) {
+            if (this.mounted) {
+              setState(() {
+                area = row[0];
+                data = row[2];
+                idSensor = row[1];
+              });
+            }
+          }
+        });
+        conn.close();
+      });
+    });
+  }
+
+  void _dropDownItemSelected(String novoItem) {
+    setState(() {
+      this._idSelecionado = novoItem;
+    });
   }
 
   Widget _listFloatingButton() {
@@ -179,25 +172,7 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
                         SizedBox(
                           width: 15,
                         ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          color: shrineBlack400,
-                          height: 40,
-                          width: 45,
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _idController,
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Uni-Sans'),
-                            decoration: InputDecoration(
-                                isDense: true,
-                                border: InputBorder.none,
-                                hintText: ''),
-                          ),
-                        )
+                        criaDropDownButton()
                       ],
                     ),
                     SizedBox(
