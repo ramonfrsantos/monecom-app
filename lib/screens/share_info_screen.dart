@@ -19,14 +19,14 @@ class _ShareInfoScreenState extends State<ShareInfoScreen> {
   void _getData() {
     db.getConnection().then((conn) {
       String sql =
-          'select area,idSensor, data from registroIot_V2 where idSensor = 3;';
+          'select area, idSensor, data from registroIot_V2 where idSensor = 1;';
       conn.query(sql).then((results) {
         for (var row in results) {
           if (this.mounted) {
             setState(() {
               area = row[0];
-              idSensor = row[1];
               data = row[2];
+              idSensor = row[1];
             });
           }
         }

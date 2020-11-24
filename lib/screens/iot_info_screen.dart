@@ -12,7 +12,7 @@ class IotInfoScreen extends StatefulWidget {
 }
 
 class _IotInfoScreenState extends State<IotInfoScreen> {
-  List<String> _ids = ['1', '2', '3', '4'];
+  List<String> _ids = [];
   var _idSelecionado = '1';
 
   // instanciando banco mysql
@@ -78,20 +78,27 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
   void _getData() {
     setState(() {
       db.getConnection().then((conn) {
-        String ids = 'select idSensor from registroIot_V2;';
-        conn.query(ids).then((results) {
-          print("Esses são os resultados: $results");
+        String meusIds = 'select idSensor from registroIot_V2;';
+        conn.query(meusIds).then((results) {
+          var meusResults = results.toList();
+
+          for (int i = 0; i < meusResults.length; i++) {
+            String aux = meusResults.elementAt(i).values[0].toString();
+
+            _ids.add(aux);
+          }
+          print(_ids);
         });
 
         String sql =
-            'select area,idSensor, data from registroIot_V2 where idSensor = $_idSelecionado;';
+            'select area, idSensor, data from registroIot_V2 where idSensor = $_idSelecionado;';
         conn.query(sql).then((results) {
           for (var row in results) {
             if (this.mounted) {
               setState(() {
                 area = row[0];
-                data = row[2];
                 idSensor = row[1];
+                data = row[2];
               });
             }
           }

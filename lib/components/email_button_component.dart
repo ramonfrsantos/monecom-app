@@ -41,7 +41,7 @@ class EmailButton extends StatelessWidget {
                   });
 
                   String removeLastChar(String str) {
-                    return str.substring(0, str.length - 1);
+                    return str.substring(0, str.length);
                   }
 
                   String listaEmails = removeLastChar(mails);
