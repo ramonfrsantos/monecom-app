@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monecom/components/email_button_component.dart';
 import 'package:monecom/components/whatsapp_button_component.dart';
-import 'package:monecom/library/models/mysql.dart';
 import 'package:monecom/screens/clients_list_screen.dart';
 
 class ShareInfoScreen extends StatefulWidget {
@@ -10,35 +9,8 @@ class ShareInfoScreen extends StatefulWidget {
 }
 
 class _ShareInfoScreenState extends State<ShareInfoScreen> {
-  //instanciando banco mysql
-  var db = Mysql();
-  var area;
-  var idSensor;
-  var data;
-
-  void _getData() {
-    db.getConnection().then((conn) {
-      String sql =
-          'select area, idSensor, data from registroIot_V2 where idSensor = 1;';
-      conn.query(sql).then((results) {
-        for (var row in results) {
-          if (this.mounted) {
-            setState(() {
-              area = row[0];
-              data = row[2];
-              idSensor = row[1];
-            });
-          }
-        }
-      });
-      conn.close();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    _getData();
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -64,7 +36,7 @@ class _ShareInfoScreenState extends State<ShareInfoScreen> {
               SizedBox(
                 height: 20,
               ),
-              EmailButton(area, idSensor, data),
+              EmailButton(),
               SizedBox(
                 height: 100,
               ),

@@ -23,6 +23,7 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
 
   @override
   void initState() {
+    _addToList();
     _getData();
     super.initState();
   }
@@ -59,10 +60,26 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
 
   criaDropDownButton() {
     return DropdownButton<String>(
+        isDense: true,
+        elevation: 4,
+        icon: Icon(Icons.arrow_drop_down),
+        iconEnabledColor: Colors.white,
+        iconDisabledColor: Colors.white,
+        iconSize: 30,
+        dropdownColor: shrinePurple900,
         items: _ids.map((String dropDownStringItem) {
           return DropdownMenuItem<String>(
             value: dropDownStringItem,
-            child: Text(dropDownStringItem),
+            child: SizedBox(
+              width: 20,
+              child: Text(
+                dropDownStringItem,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
           );
         }).toList(),
         onChanged: (String novoItemSelecionado) {
@@ -75,7 +92,7 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
         value: _idSelecionado);
   }
 
-  void _getData() {
+  void _addToList() {
     setState(() {
       db.getConnection().then((conn) {
         String meusIds = 'select idSensor from registroIot_V2;';
@@ -89,7 +106,13 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
           }
           print(_ids);
         });
+      });
+    });
+  }
 
+  void _getData() {
+    setState(() {
+      db.getConnection().then((conn) {
         String sql =
             'select area, idSensor, data from registroIot_V2 where idSensor = $_idSelecionado;';
         conn.query(sql).then((results) {

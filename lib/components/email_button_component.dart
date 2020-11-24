@@ -14,7 +14,6 @@ class EmailButton extends StatelessWidget {
   var data;
 
   List<String> body = [];
-  EmailButton(this.area, this.idSensor, this.data);
 
   @override
   Widget build(BuildContext context) {
