@@ -112,7 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget _buildSendButton(BuildContext context) {
     return RaisedButton(
       child: Text(
-        'Enviar',
+        'Salvar',
         style: TextStyle(
           fontSize: 18,
         ),

@@ -13,6 +13,8 @@ class IotInfoScreen extends StatefulWidget {
 }
 
 class _IotInfoScreenState extends State<IotInfoScreen> {
+  var _idController = TextEditingController();
+
   // instanciando o banco de mensagens
   var snapshots = FirebaseFirestore.instance
       .collection("mensagens")
@@ -21,33 +23,65 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
 
   // instanciando banco mysql
   var db = Mysql();
-  var statusSensor;
+  var area;
   var idSensor;
+  var id;
   var data;
 
   void _getData() {
-    db.getConnection().then((conn) {
-      String sql =
-          'select statusSensor,idSensor, data from registrosIot where idSensor = 3;';
-      conn.query(sql).then((results) {
-        for (var row in results) {
-          if (this.mounted) {
-            setState(() {
-              statusSensor = row[0];
-              data = row[2];
-              idSensor = row[1];
-            });
-          }
-        }
-      });
-      conn.close();
+    setState(() {
+      if (id == "") {
+        db.getConnection().then((conn) {
+          String sql = 'select area,idSensor, data from registroIot_V2;';
+          conn.query(sql).then((results) {
+            for (var row in results) {
+              if (this.mounted) {
+                setState(() {
+                  area = row[0];
+                  data = row[2];
+                  idSensor = row[1];
+                });
+              }
+            }
+          });
+          conn.close();
+        });
+      } else {
+        db.getConnection().then((conn) {
+          String sql =
+              'select area,idSensor, data from registroIot_V2 where idSensor = $id;';
+          conn.query(sql).then((results) {
+            for (var row in results) {
+              if (this.mounted) {
+                setState(() {
+                  area = row[0];
+                  data = row[2];
+                  idSensor = row[1];
+                });
+              }
+            }
+          });
+          conn.close();
+        });
+      }
     });
   }
 
   @override
+  void dispose() {
+    _idController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
+    _idController.addListener(() {
+      id = _idController.text;
+      setState(() {
+        _getData();
+      });
+    });
     super.initState();
-    _getData();
   }
 
   @override
@@ -127,111 +161,109 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    idSensor == null
-                        ? SizedBox(
-                            height: 100,
-                          )
-                        : SizedBox(
-                            height: 80,
-                          ),
-                    idSensor == null
-                        ? Container()
-                        : RichText(
+                    SizedBox(
+                      height: 80,
+                    ),
+                    Row(
+                      children: [
+                        RichText(
                             text: TextSpan(children: [
-                            TextSpan(
-                              text: "ID do Sensor: ",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: idSensor == null ? "" : "$idSensor",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.normal),
-                            )
-                          ])),
-                    idSensor == null
-                        ? Container()
-                        : SizedBox(
-                            height: 20,
+                          TextSpan(
+                            text: "ID do Sensor: ",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold),
                           ),
-                    idSensor == null
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          )
-                        : RichText(
-                            text: TextSpan(children: [
-                            TextSpan(
-                              text: "Área de acionamento: ",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: "$statusSensor",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.normal),
-                            )
-                          ])),
-                    idSensor == null
-                        ? Container()
-                        : SizedBox(
-                            height: 20,
+                        ])),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          color: shrineBlack400,
+                          height: 40,
+                          width: 45,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            controller: _idController,
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Uni-Sans'),
+                            decoration: InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                hintText: ''),
                           ),
-                    idSensor == null
-                        ? Container()
-                        : RichText(
-                            text: TextSpan(children: [
-                            TextSpan(
-                              text: "Data: ",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: data == null
-                                  ? ""
-                                  : "${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.normal),
-                            )
-                          ])),
-                    idSensor == null
-                        ? Container()
-                        : SizedBox(
-                            height: 20,
-                          ),
-                    idSensor == null
-                        ? Container()
-                        : RichText(
-                            text: TextSpan(children: [
-                            TextSpan(
-                              text: "Horário: ",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: data == null
-                                  ? ""
-                                  : "${data.toString().substring(11, 19)}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.normal),
-                            )
-                          ])),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                        text: "Área de acionamento: ",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: area == null ? "" : "$area",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal),
+                      )
+                    ])),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                        text: "Data: ",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: data == null
+                            ? ""
+                            : "${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal),
+                      )
+                    ])),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                        text: "Horário: ",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: data == null
+                            ? ""
+                            : "${data.toString().substring(11, 19)}",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal),
+                      )
+                    ])),
                   ],
                 ),
               ),

@@ -12,19 +12,19 @@ class ShareInfoScreen extends StatefulWidget {
 class _ShareInfoScreenState extends State<ShareInfoScreen> {
   //instanciando banco mysql
   var db = Mysql();
-  var statusSensor;
+  var area;
   var idSensor;
   var data;
 
   void _getData() {
     db.getConnection().then((conn) {
       String sql =
-          'select statusSensor,idSensor, data from registrosIot where idSensor = 3;';
+          'select area,idSensor, data from registroIot_V2 where idSensor = 3;';
       conn.query(sql).then((results) {
         for (var row in results) {
           if (this.mounted) {
             setState(() {
-              statusSensor = row[0];
+              area = row[0];
               idSensor = row[1];
               data = row[2];
             });
@@ -64,7 +64,7 @@ class _ShareInfoScreenState extends State<ShareInfoScreen> {
               SizedBox(
                 height: 20,
               ),
-              EmailButton(statusSensor, idSensor, data),
+              EmailButton(area, idSensor, data),
               SizedBox(
                 height: 100,
               ),

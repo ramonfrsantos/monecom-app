@@ -6,11 +6,11 @@ DocumentSnapshot snapshot;
 
 // ignore: must_be_immutable
 class EmailButton extends StatelessWidget {
-  int statusSensor;
+  var area;
   int idSensor;
   var data;
 
-  EmailButton(this.statusSensor, this.idSensor, this.data);
+  EmailButton(this.area, this.idSensor, this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class EmailButton extends StatelessWidget {
                       'subject':
                           '[Mon&Com] Estamos enviando informações do monitoramento.',
                       'body':
-                          "O sensor $idSensor foi acionado na área $statusSensor, em ${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}, às ${data.toString().substring(11, 19)}."
+                          "O sensor $idSensor foi acionado na área $area, em ${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}, às ${data.toString().substring(11, 19)}."
                     },
                   );
 

@@ -67,11 +67,11 @@ ThemeData _buildShrineTheme() {
 TextTheme _buildShrineTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline: base.headline.copyWith(
+        headline5: base.headline5.copyWith(
           fontWeight: FontWeight.w900,
           letterSpacing: defaultLetterSpacing,
         ),
-        title: base.title.copyWith(
+        headline6: base.headline6.copyWith(
           fontWeight: FontWeight.w900,
           fontSize: 18,
           letterSpacing: defaultLetterSpacing,
@@ -81,20 +81,20 @@ TextTheme _buildShrineTextTheme(TextTheme base) {
           fontSize: 14,
           letterSpacing: defaultLetterSpacing,
         ),
-        body2: base.body2.copyWith(
+        bodyText1: base.bodyText1.copyWith(
           fontWeight: FontWeight.w900,
           fontSize: 16,
           letterSpacing: defaultLetterSpacing,
         ),
-        body1: base.body1.copyWith(
+        bodyText2: base.bodyText2.copyWith(
           fontWeight: FontWeight.w900,
           letterSpacing: defaultLetterSpacing,
         ),
-        subhead: base.subhead.copyWith(
+        subtitle1: base.subtitle1.copyWith(
           fontWeight: FontWeight.w900,
           letterSpacing: defaultLetterSpacing,
         ),
-        display1: base.display1.copyWith(
+        headline4: base.headline4.copyWith(
           fontWeight: FontWeight.w900,
           letterSpacing: defaultLetterSpacing,
         ),
