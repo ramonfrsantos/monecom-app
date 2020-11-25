@@ -24,7 +24,9 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
   @override
   void initState() {
     _addToList();
-    _getData();
+    Future.delayed(Duration(milliseconds: 500), () {
+      _getData();
+    });
     super.initState();
   }
 
@@ -104,7 +106,6 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
 
             _ids.add(aux);
           }
-          print(_ids);
         });
       });
     });
@@ -162,118 +163,120 @@ class _IotInfoScreenState extends State<IotInfoScreen> {
       child: Center(
         child: Padding(
           padding: EdgeInsets.all(22),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              BorderedText(
-                strokeColor: shrinePurple900,
-                strokeWidth: 10.0,
-                child: Text(
-                  "Informações do sensor",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontFamily: 'UniSans-Heavy'),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: data == null
+              ? CircularProgressIndicator()
+              : Column(
                   children: [
                     SizedBox(
-                      height: 80,
+                      height: 10,
                     ),
-                    Row(
-                      children: [
-                        RichText(
-                            text: TextSpan(children: [
-                          TextSpan(
-                            text: "ID do Sensor: ",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
+                    BorderedText(
+                      strokeColor: shrinePurple900,
+                      strokeWidth: 10.0,
+                      child: Text(
+                        "Informações do sensor",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontFamily: 'UniSans-Heavy'),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 80,
                           ),
-                        ])),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        criaDropDownButton()
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                        text: "Área de acionamento: ",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                  text: "ID do Sensor: ",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ])),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              criaDropDownButton()
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                              text: "Área de acionamento: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: area == null ? "" : "$area",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                              text: "Data: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: data == null
+                                  ? ""
+                                  : "${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                              text: "Horário: ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: data == null
+                                  ? ""
+                                  : "${data.toString().substring(11, 19)}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ])),
+                        ],
                       ),
-                      TextSpan(
-                        text: area == null ? "" : "$area",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal),
-                      )
-                    ])),
-                    SizedBox(
-                      height: 20,
                     ),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                        text: "Data: ",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(
-                        text: data == null
-                            ? ""
-                            : "${data.toString().substring(8, 10).toLowerCase()}/${data.toString().substring(5, 7)}/${data.toString().substring(0, 4)}",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal),
-                      )
-                    ])),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                        text: "Horário: ",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(
-                        text: data == null
-                            ? ""
-                            : "${data.toString().substring(11, 19)}",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal),
-                      )
-                    ])),
                   ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
