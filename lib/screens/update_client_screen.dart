@@ -52,25 +52,27 @@ class UpdateClientScreen extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      onPressed: () async {
-                        if (signUpStore.isFormValid) {
-                          db.collection('clientes').doc(docId).update({
-                            "nome": "${signUpStore.name}",
-                            "email": "${signUpStore.email}",
-                          });
+                      onPressed: signUpStore.isFormValid
+                          ? () async {
+                              if (signUpStore.isFormValid) {
+                                db.collection('clientes').doc(docId).update({
+                                  "nome": "${signUpStore.name}",
+                                  "email": "${signUpStore.email}",
+                                });
 
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
 
-                          return showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _buildAlertDialog();
-                              });
-                        } else {
-                          return null;
-                        }
-                      },
+                                return showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _buildAlertDialog();
+                                    });
+                              } else {
+                                return null;
+                              }
+                            }
+                          : null,
                     ),
                   );
                 },

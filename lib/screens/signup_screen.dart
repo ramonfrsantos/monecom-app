@@ -110,77 +110,85 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildSendButton(BuildContext context) {
-    return RaisedButton(
-      child: Text(
-        'Salvar',
-        style: TextStyle(
-          fontSize: 18,
-        ),
-      ),
-      onPressed: () async {
-        if (signUpStore.isFormValid) {
-          FirebaseFirestore db = FirebaseFirestore.instance;
+    return Observer(
+      builder: (_) {
+        return RaisedButton(
+          disabledColor: shrinePurple900.withAlpha(120),
+          child: Text(
+            'Salvar',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          onPressed: signUpStore.isFormValid
+              ? () async {
+                  if (signUpStore.isFormValid) {
+                    FirebaseFirestore db = FirebaseFirestore.instance;
 
-          QuerySnapshot snapshot = await db
-              .collection("clientes")
-              .where("email", isEqualTo: signUpStore.email)
-              .get();
+                    QuerySnapshot snapshot = await db
+                        .collection("clientes")
+                        .where("email", isEqualTo: signUpStore.email)
+                        .get();
 
-          if (snapshot.docs.isNotEmpty) {
-            return showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text(
-                      "Desculpe",
-                      style: TextStyle(
-                        color: shrineBlack400,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    content: Text(
-                      "O e-mail já foi cadastrado no nosso sistema! Tente novamente.",
-                      style: TextStyle(
-                        color: shrineBlack400,
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    contentPadding: EdgeInsets.only(
-                        left: 20, top: 30.0, right: 20, bottom: 40),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                  );
-                });
-          } else {
-            Navigator.pop(context);
+                    if (snapshot.docs.isNotEmpty) {
+                      return showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              title: Text(
+                                "Desculpe",
+                                style: TextStyle(
+                                  color: shrineBlack400,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              content: Text(
+                                "O e-mail já foi cadastrado no nosso sistema! Tente novamente.",
+                                style: TextStyle(
+                                  color: shrineBlack400,
+                                  fontSize: 18,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              contentPadding: EdgeInsets.only(
+                                  left: 20, top: 30.0, right: 20, bottom: 40),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                            );
+                          });
+                    } else {
+                      Navigator.pop(context);
 
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _buildAlertDialog();
-                });
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return _buildAlertDialog();
+                          });
 
-            return db.collection("clientes").add({
-              "nome": "${signUpStore.name}",
-              "email": "${signUpStore.email}",
-              "endereco": {
-                "rua": "${txtRua.text}",
-                "bairro": "${txtBairro.text}",
-                "cidade": "${txtCidade.text}",
-                "uf": "${txtEstado.text}",
-                "numero": "${txtNumero.text}",
-                "complemento": "${txtComplemento.text}",
-              },
-              "telefone": "${signUpStore.phone}"
-            });
-          }
-        } else {
-          return null;
-        }
+                      return db.collection("clientes").add({
+                        "nome": "${signUpStore.name}",
+                        "email": "${signUpStore.email}",
+                        "endereco": {
+                          "rua": "${txtRua.text}",
+                          "bairro": "${txtBairro.text}",
+                          "cidade": "${txtCidade.text}",
+                          "uf": "${txtEstado.text}",
+                          "numero": "${txtNumero.text}",
+                          "complemento": "${txtComplemento.text}",
+                        },
+                        "telefone": "${signUpStore.phone}"
+                      });
+                    }
+                  } else {
+                    return null;
+                  }
+                }
+              : null,
+        );
       },
     );
   }
